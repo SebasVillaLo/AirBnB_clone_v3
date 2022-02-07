@@ -19,7 +19,7 @@ def teardown_appcontext(self):
 @app.errorhandler(404)
 def error(err):
     """Return error for this page"""
-    return jsonify({"error": "Not found"}), err
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == '__main__':
