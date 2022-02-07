@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Module of the APP configuration"""
-from flask import Flask
+from flask import Flask, jsonify
 import os
 from models import storage
 from api.v1.views import app_views
@@ -14,6 +14,12 @@ def teardown_appcontext(self):
     Return sotrange close
     """
     return storage.close()
+
+
+@app.errorhandler(404)
+def error(err):
+    """Return error for this page"""
+    return jsonify({"error": "Not found"}), err
 
 
 if __name__ == '__main__':
