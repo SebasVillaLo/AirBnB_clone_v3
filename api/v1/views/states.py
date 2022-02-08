@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 """Module for states"""
-import re
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
-from models.engine.file_storage import FileStorage
 from models.state import State
 
 dic_states = storage.all(State)
@@ -17,7 +15,6 @@ def get_states(state_id):
     """ Show status of the code"""
     if state_id:
         state = storage.get(State, state_id)
-        print(state)
         if not state:
             abort(404)
         return jsonify(state.to_dict())
@@ -41,9 +38,9 @@ def delete_states(state_id):
 def post_states():
     state_jason = request.get_json(silent=True)
     if not state_jason:
-        return(jsonify({'error': 'Not a JSON'})), 400
+        abort(400, 'Not a JSON')
     if 'name' not in state_jason:
-        return(jsonify({'error': 'Missing name'})), 400
+        abort(400, 'Missing name')
     state = State(**state_jason)
     storage.new(state)
     state.save()
