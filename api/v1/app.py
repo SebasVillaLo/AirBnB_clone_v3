@@ -13,7 +13,7 @@ def teardown_appcontext(self):
     """
     Return sotrange close
     """
-    return storage.close()
+    storage.close()
 
 
 @app.errorhandler(404)
@@ -24,4 +24,5 @@ def error(err):
 
 if __name__ == '__main__':
     app.run(host=os.getenv('HBNB_API_HOST', '0.0.0.0'),
-            port=int(os.getenv('HBNB_API_PORT', '5000')), threaded=True)
+            port=int(os.getenv('HBNB_API_PORT', '5000')), threaded=True,
+            debug=True)
