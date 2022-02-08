@@ -13,7 +13,6 @@ from models.state import State
 def states(id):
     """ Show status of the code"""
     dic_states = storage.all(State)
-    print(dic_states)
     if id:
         lst_states = [state.to_dict() for state in dic_states.values()
                       if state.id == id]
