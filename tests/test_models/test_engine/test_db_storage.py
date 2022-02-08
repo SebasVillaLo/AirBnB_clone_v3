@@ -4,6 +4,7 @@ Contains the TestDBStorageDocs and TestDBStorage classes
 """
 
 from datetime import datetime
+import imp
 import inspect
 import models
 from models.engine import db_storage
@@ -18,6 +19,7 @@ import json
 import os
 import pep8
 import unittest
+from models import storage
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
@@ -68,7 +70,7 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
+class TestDBStorage(unittest.TestCase):
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
@@ -88,9 +90,17 @@ class TestFileStorage(unittest.TestCase):
         """Test that save properly saves objects to file.json"""
 
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
-    def test_count(self):
+    def test_count2(self):
         """test count is working and is correct type"""
         real_count = models.count()
         self.assertIsInstance(real_count, int)
         test_count = len(models.all())
         self.assertEqual(real_count, test_count)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    def test_get2(self):
+        user, state = User(first_name='Cristian'), State(name='Antioquia')
+        user.save(), state.save()
+
+        self.assertIs(storage.get(User, user.id), user)
+        self.assertIs(storage.get(State, state.id), state)

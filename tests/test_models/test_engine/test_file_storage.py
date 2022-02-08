@@ -4,6 +4,7 @@ Contains the TestFileStorageDocs classes
 """
 
 from datetime import datetime
+import imp
 import inspect
 import models
 from models.engine import file_storage
@@ -18,6 +19,7 @@ import json
 import os
 import pep8
 import unittest
+from models import storage
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -122,3 +124,12 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsInstance(real_count, int)
         test_count = len(storage.all())
         self.assertEqual(real_count, test_count)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        user, state = User(first_name='Cristian'), State(name='Antioquia')
+        user.save(), state.save()
+
+        self.assertIs(storage.get(User, user.id), user)
+        self.assertIs(storage.get(State, state.id), state)
+        self.assertIs(storage.get(User, 'user_test'), None)
