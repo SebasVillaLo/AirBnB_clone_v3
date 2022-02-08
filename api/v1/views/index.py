@@ -1,9 +1,8 @@
 #!/usr/bin/python3
-""" Index.py """
+""" Module for the Index """
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
-from models.engine.file_storage import FileStorage
 
 classes = {"amenities": "Amenity", "cities": "City", "places": "Place",
            "reviews": "Review", "states": "State", "users": "User"}
