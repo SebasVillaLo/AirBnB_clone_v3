@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """
-Module for Users Requests
+new view for user objects that handles all default RESTFul API
+actions
 """
+
 from models import storage
 from flask import jsonify, abort, request
 from api.v1.views import app_views
@@ -9,14 +11,19 @@ from models.user import User
 
 
 @app_views.route("/users", methods=["GET"], strict_slashes=False)
-def list_users():
-    """returns a list with all the dictionary representation of a User"""
-    return jsonify([user.to_dict() for user in storage.all(User).values()])
-
-
-@app_views.route("/users/<user_id>", methods=["GET"], strict_slashes=False)
-def instance_users_id(user_id):
+def Lists_users():
     """returns a list with all the instances of user"""
+    list = []
+    users = storage.all(User).values()
+    for user in users:
+        list.append(user.to_dict())
+    return jsonify(list)
+
+
+@app_views.route("/users/<user_id>", methods=["GET"],
+                 strict_slashes=False)
+def Instance_users_id(user_id):
+    """returns the instance that is specified by id"""
     users = storage.get(User, user_id)
     if users is None:
         abort(404)
@@ -25,7 +32,7 @@ def instance_users_id(user_id):
 
 
 @app_views.route("/users", methods=["POST"], strict_slashes=False)
-def post_users():
+def POST_users():
     """creates instance requesting only the name
     and returns it as a dictionary"""
     data = request.get_json()
@@ -42,9 +49,10 @@ def post_users():
         return jsonify(NewUser.to_dict()), 201
 
 
-@app_views.route("/users/<user_id>", methods=["PUT"], strict_slashes=False)
-def put_users_id(user_id):
-    """ returns dictionary representation of of users"""
+@app_views.route("/users/<user_id>", methods=["PUT"],
+                 strict_slashes=False)
+def PUT_users_id(user_id):
+    """creates instance but asking for its id and returns it as a dictionary"""
     users = storage.get(User, user_id)
     if users is None:
         abort(404)
@@ -54,15 +62,18 @@ def put_users_id(user_id):
         abort(400, "Not a JSON")
     else:
         for key, value in request_data.items():
-            if key not in ['id', 'created_at', 'updated_at']:
+            if key in ['id', 'created_at', 'updated_at']:
+                pass
+            else:
                 setattr(users, key, value)
         storage.save()
-        return jsonify(users.to_dict()), 200
+        result = users.to_dict()
+        return jsonify(result), 200
 
 
 @app_views.route("/users/<user_id>", methods=["DELETE"],
                  strict_slashes=False)
-def delete_users_id(user_id=None):
+def DELETE_users_id(user_id=None):
     """remove instance by id and return an empty dictionary"""
     users = storage.get(User, user_id)
     if users is None:
