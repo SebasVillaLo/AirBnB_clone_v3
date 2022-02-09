@@ -10,12 +10,13 @@ dic_states = storage.all(State)
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
+    """ Returns a list with the dictionary representation of all the states"""
     return jsonify([state.to_dict() for state in dic_states.values()])
 
 
 @app_views.route('/states/<state_id>', strict_slashes=False)
 def get_states_id(state_id):
-    """ Show status of the code"""
+    """ Returns dictionary representation of a given state by id"""
     state = storage.get(State, state_id)
     if not state:
         abort(404)
