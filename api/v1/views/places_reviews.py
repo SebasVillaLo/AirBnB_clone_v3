@@ -20,7 +20,7 @@ def get_reviews_from_one_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    reviews_list = []
+
     reviews = storage.all(Review).values()
 
     return jsonify(
