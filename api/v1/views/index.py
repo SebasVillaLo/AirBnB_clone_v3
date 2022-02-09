@@ -4,9 +4,6 @@ from api.v1.views import app_views
 from flask import jsonify
 from models import storage
 
-classes = {"amenities": "Amenity", "cities": "City", "places": "Place",
-           "reviews": "Review", "states": "State", "users": "User"}
-
 
 @app_views.route('/status', methods=['GET'])
 def code_status():
@@ -18,5 +15,8 @@ def code_status():
 def code_stats():
     """ Show statas about the classes
     counts the objects per class"""
+    classes = {'amenities': 'Amenity', 'cities': 'City', 'places': 'Place',
+               'reviews': 'Review', 'states': 'State', 'users': 'User'}
+
     d = {p_cls: storage.count(r_cls) for p_cls, r_cls in classes.items()}
     return jsonify(d)
