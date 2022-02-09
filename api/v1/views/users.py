@@ -44,6 +44,7 @@ def post_users():
 
 @app_views.route("/users/<user_id>", methods=["PUT"], strict_slashes=False)
 def put_users_id(user_id):
+    """ returns dictionary representation of of users"""
     users = storage.get(User, user_id)
     if users is None:
         abort(404)
