@@ -8,17 +8,18 @@ from models.state import State
 dic_states = storage.all(State)
 
 
-@app_views.route('/states', defaults={'state_id': None}, methods=['GET'],
-                 strict_slashes=False)
-@app_views.route('/states/<state_id>', strict_slashes=False)
-def get_states(state_id):
-    """ Show status of the code"""
-    if state_id:
-        state = storage.get(State, state_id)
-        if not state:
-            abort(404)
-        return jsonify(state.to_dict())
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
+def get_states():
     return jsonify([state.to_dict() for state in dic_states.values()])
+
+
+@app_views.route('/states/<state_id>', strict_slashes=False)
+def get_states_id(state_id):
+    """ Show status of the code"""
+    state = storage.get(State, state_id)
+    if not state:
+        abort(404)
+    return jsonify(state.to_dict())
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'],
