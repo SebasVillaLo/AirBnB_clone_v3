@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 """Module of the APP configuration"""
 from flask import Flask, jsonify
-import os
 from models import storage
+from os import getenv
+from flask_cors import CORS
 from api.v1.views import app_views
+
 app = Flask(__name__)
 app.register_blueprint(app_views)
+CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 
 @app.teardown_appcontext
@@ -23,6 +26,6 @@ def error(err):
 
 
 if __name__ == '__main__':
-    app.run(host=os.getenv('HBNB_API_HOST', '0.0.0.0'),
-            port=int(os.getenv('HBNB_API_PORT', '5000')), threaded=True,
+    app.run(host=getenv('HBNB_API_HOST', '0.0.0.0'),
+            port=int(getenv('HBNB_API_PORT', '5000')), threaded=True,
             debug=True)
